@@ -1,8 +1,6 @@
 package com.anacoimbra.android.contacts.ui
 
-import androidx.compose.Composable
-import androidx.compose.launchInComposition
-import androidx.compose.state
+import androidx.compose.*
 import androidx.ui.core.Alignment
 import androidx.ui.core.ContentScale
 import androidx.ui.core.ContextAmbient
@@ -34,9 +32,9 @@ import dev.chrisbanes.accompanist.coil.CoilImage
 
 @Composable
 fun ContactList(onClick: (contact: Contact) -> Unit) {
-    val list = state { ContactList(contacts = emptyList()) }
+    var list by state { ContactList(contacts = emptyList()) }
     launchInComposition {
-        list.value = getContacts()
+        list = getContacts()
     }
     Scaffold(
         topAppBar = {
@@ -50,7 +48,7 @@ fun ContactList(onClick: (contact: Contact) -> Unit) {
         },
         bodyContent = {
             VerticalScroller {
-                list.value.contacts.map {
+                list.contacts.map {
                     ContactItem(it, modifier = Modifier.clickable(onClick = {
                         onClick(it)
                     }))
@@ -116,7 +114,7 @@ fun ContactDetail(contact: Contact, onBackPressed: () -> Unit) {
 @Composable
 fun ListPreview() {
     ContactsTheme {
-        ContactList() {}
+        ContactList { }
     }
 }
 
